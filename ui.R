@@ -1,247 +1,299 @@
 library(ggplot2)
 
 library(class)
-dataurl="http://www.statsci.org/data/oz/ctsibuni.txt"
-ctsib=read.table("http://www.statsci.org/data/oz/ctsibuni.txt",sep="\t",header=TRUE)
 
 
-shinyUI(navbarPage("Project 2 & 3 - Min Chen",
-                   tabPanel("Projects requirements",
-                            mainPanel(
-HTML("
-<h2 style='color:#009933'>Requirements from Project 2</h2>
+
+shinyUI(
+    navbarPage(
+        "Shiny project for ST542 - Min Chen",
+        tabPanel("Projects requirements",
+                 mainPanel(
+                     HTML(
+                         "
+    <h2 style='color:#009933'>Introduction </h2>
+    <p>Expanded Food and Nutrition Education Program (EFNEP) is a program funded by  the United States Department of Agriculture (USDA) National Institute of Food and Agriculture to provide nutrition education to low-income families, particularly those with young children. In this study, the participants were educated food nutrition and taught how to conduct the food research. Before and after the classes, a survey with diet history, attitudes on food consumption and usage, and the demographic record was used for program evaluation.</p>
+    <p>In the program, several classes integrated local food to engage their participants. We are trying to understand how the including of local food will impact the food behavior changes.</p>
+                             
+    <h2 style='color:#009933'>Background </h2>
+    <p>Nutrition education is used to help participants to choose healthy food options so that their health can be improved, in order to maximize the effect of nutrition education, the USDA encouraged the researchers to incorporate persuasive message (e.g. in this research, local food were introduced) into their programs .  Some message is gain-framed, meaning they present beneficial outcomes, while loss-framed messages will lead to negative outcomes. In this research, the including of the local food may be considered as a gained-framed factor.</p>
+    "
+))),
+        
+        tabPanel("Introduction to Data",
+                 mainPanel(
+                     HTML(
+                         "
+<h3>Data</h3>
+<p>This study used data collected from North Carolina, it has sample of forty-three counties. The participants was educated with a 6 or 12 weeks program with 6-18 people, and during the education program, some of them will be exposed to local food including introducing local food from local farmers or community gardens in food demonstrations and touring the class to farmers’ market.  For all the participants, a questionnaire that includes their diet history, attitudes on food consumption and usage, and the demographic record were collected at the beginning of and at the end of the program.
+     </p>
+     <p>
+     In this study, 3554 low-income mothers participated in the program at the beginning, we lost follow up 790 of them during the process; and 254 participants didn’t complete the questionnaires, thus we got 2510 completed surveys, and 771 out of them were exposed to local food (figure 1).
+     </p>
      
-<h3>Creating a Shiny App</h3>
-<p>The goal of this project is to create a nice looking shiny app</p>
-<h3>Find a data set you are interested in</h3>
-<p>For this project I'm going to let you choose your own data set. This should be a data set that has at least two categorical and at least two quantitive variables. See the previous project for a list of places with datasets. Alternatively, you could pull data from the web within your app (for instance baseball data (<a href=https://pitchrx.cpsievert.me/>link</a>) or twitter data (<a href=https://cran.r-project.org/web/packages/rtweet/vignettes/intro.html>link</a>)). Choose something you are interested in! We are going to create a shiny app (see specifications below) and later we will add some predictive modeling to the app.</p>
-<h3>App Requirements</h3>
-<ul>
-    <li>Your app should have multiple pages to it. This should include an information page, two pages - each with at least one graph, and a page that allows the user to scroll through the data (or subset of data of interest). I don't care if you use the built in tabs for shiny or a package like shinydashboard, use the method you prefer.</li>
-    <li> You should have at least two different dynamic UI elements.</li>
-    <li> You should have a button that allows the user to save a plot they are viewing to a file.</li>
-    <li> You should have an option to allow the user to save the data currently being used for a plot (or when they are looking at the data table) to a .csv (or other) file.</li>
-    <li> You should utilize the ability to click on a plot or select a region in some way.</li>
-    <li> You should include some type of math type (maybe an equation or just a special symbol you need to use mathJax for).</li>
-<li>You should include a link to something and some other formatted text.</li>
-</ul>
-<h2 style='color:#009933'>Requirements from Project 3</h2>
-     <h3>Continuing Your App</h3>
-<p>The goal of this project is to add some modeling and expoloratory elements to your app.</p>
-    <h3>Additional App Requirements</h3>
-<ul><li> You may have received some points off for project 2. Please update relevant parts and fix any lingering issues.</li></ul>
-<p>I’d like you to add two new items to your app (if you already had some of this you can just add to it to meet the specifications below).</p>
-<ul><li>(At least) two supervised learning models (feel free to branch out to things we didn’t discuss if you’d
-like).</li>
-<ul><li>You should give the user some functionality for choosing model settings (variables used, number of trees, etc.) and for changing relevant output.</ul>
-</li>
-<li>(At least) one of our unsupervised learning methods should be added.</li>
-<ul><li>Again, give the user functionality in terms of variables used, number of PCs, number of clusters, clustering method, etc. as well as for changing the way the results are displayed</li></ul>
-
-"))),
-
-    tabPanel("Introduction to Data",
-             mainPanel(
-                 HTML("
-<h3>Effect of Surface and Vision on Balance (copy from <a href='http://www.statsci.org/data/oz/ctsib.html'>www.statsci.org</a>)</h3>
-<p>Keywords: repeated measures, ordinal regression</p>
-<hr><h3>Description</h3>
-<p>The balance of subjects were observed for two different surfaces and for restricted and unrestricted vision. Balance was assessed qualitatively on an ordinal 4-point scale based on observation by the experimenter. Subjects were expected to be better balanced (show less sway) when standing on the normal surface than on foam, and when their eyes were open rather than closed or when their vision was restricted by a dome. </p>
-<p>Equal numbers of male and female subjects were chosen.  For both males and females, ten older (more than 24 years old) and ten younger subjects were selected.</p>
-<p>The data is available in two formats. The is in univariate or &quot;strung out form&quot; which is suitable for entry to Minitab or S-Plus and to most mixed model programs. The second is in repeated measures format which is suitable for SPSS and for most special purpose repeated measures programs.</p>
-<p>Univariate format:</p>
-<table cellpadding='0' cellspacing='0'>
-    <tr><td widht='20'><td colspan='3'><hr></td></tr>
-    <tr><td width='20'><td align='right'>Variable <td width='20'><td>Description</tr>
-    <tr><td widht='20'><td colspan='3'><hr></td></tr>
-    <tr><td width='20'><td align='right'>Subject<td width='20'><td>1 to 40</tr>
-    <tr><td width='20'><td align='right'>Sex<td width='20'><td>male or female</tr>
-    <tr><td width='20'><td align='right'>Age<td width='20'><td>Age of subject in years</tr>
-    <tr><td width='20'><td align='right'>Height<td width='20'><td>Height in cm</tr>
-    <tr><td width='20'><td align='right'>Weight<td width='20'><td>Weight in kg</tr>
-    <tr><td width='20'><td align='right'>Surface<td width='20'><td>normal or foam</tr>
-    <tr><td width='20'><td align='right'>Vision<td width='20'><td>eyes open, eyes closed, or closed dome</tr>
-    <tr><td width='20'><td align='right'>CTSIB<td width='20'><td>Qualitive measure of balance, 1 (stable) - 4 (unstable)
-    <tr><td widht='20'><td colspan='3'><hr></td></tr>
-</table>
-<p>Repeated measures format:</p>
-      <table cellpadding='0' cellspacing='0'>
-      <tr><td widht='20'><td colspan='3'><hr></td></tr>
-      <tr><td width='20'><td align='right'>Variable <td width='20'><td>Description</tr>
-      <tr><td widht='20'><td colspan='3'><hr></td></tr>
-      <tr><td width='20'><td align='right'>Subject<td width='20'><td>1 to 40</tr>
-      <tr><td width='20'><td align='right'>Sex<td width='20'><td>male or female</tr>
-      <tr><td width='20'><td align='right'>Age<td width='20'><td>Age of subject in years</tr>
-      <tr><td width='20'><td align='right'>Height<td width='20'><td>Height in cm</tr>
-      <tr><td width='20'><td align='right'>Weight<td width='20'><td>Weight in kg</tr>
-      <tr>
-      <td width='20'><td align='right'>NO1<td width='20'><td>Balance measure on
-      normal surface with eyes open, first replicate
-      </tr>
-      <tr>
-      <td width='20'><td align='right'>NO2<td width='20'><td>as above, second
-      replicate
-      </tr>
-      <tr>
-      <td width='20'><td align='right'>NC1<td width='20'><td>Balance measure on
-      normal surface with eyes closed, first replicate
-      </tr>
-      <tr>
-      <td width='20'><td align='right'>NC2<td width='20'><td>as above, second
-      replicate
-      </tr>
-      <tr>
-      <td width='20'><td align='right'>ND1<td width='20'><td>Balance measure on
-      normal surface with dome, first replicate
-      </tr>
-      <tr>
-      <td width='20'><td align='right'>ND2<td width='20'><td>as above, second
-      replicate
-      </tr>
-      <tr>
-      <td width='20'><td align='right'>FO1<td width='20'><td>Balance measure on foam
-      surface with eyes open, first replicate
-      </tr>
-      <tr><td width='20'><td align='right'>FO2<td width='20'><td>as above, second
-      replicate</tr>
-      <tr>
-      <td width='20'><td align='right'>FC1<td width='20'><td>Balance measure on foam
-      surface with eyes closed, first replicate
-      </tr>
-      <tr><td width='20'><td align='right'>FC2<td width='20'><td>as above, second
-      replicate</tr>
-      <tr>
-      <td width='20'><td align='right'>FD1<td width='20'><td>Balance measure on foam
-      surface with dome, first replicate
-      </tr>
-      <tr><td width='20'><td align='right'>FD2<td width='20'><td>as above, second
-      replicate
-      <tr><td widht='20'><td colspan='3'><hr></td></tr>
-      </table>
-      
-      <h3>Download</h3>
-      
-      <ul>
-      <li><a href='http://www.statsci.org/data/oz/ctsibuni.txt'>Data file</a> (tab-delimited text, univariate 
-      format)</li>
-      <li><a href='http://www.statsci.org/data/oz/ctsibrm.txt'>Data file</a> (repeated measures format)</li>
-      </ul>
-      
-      <h3>Source</h3>
-      
-      <table cellspacing='0' cellpadding='0'>
-      <tr>
-      <td>Steele, R. (1998). Honours Thesis, Department of Physiotherapy, University of Queensland. </td>
-      </table>
-      
-      <h3>Analysis</h3>
-      
-      <p>The data is best analysed using ordinal methods, but normal analysis of variance gives a good approximation. We see strong effects for Surface and Vision, and an interesting interaction between Sex and Vision. If ordinal regression is used, the two 4's in the response will need to be recoded to 3's.</p>
-                      ")
-             )),
-# Application title
-tabPanel("Exploration of the ctsib data",
-    # Sidebar with options for the data set
-    sidebarLayout(
-        sidebarPanel(
-        h3("Select the Vision:"),
-        selectizeInput("Vision", "Vision", selected = "open", choices = levels(as.factor(ctsib$Vision))),
-        br(),
-        h3("Select the Surface:"),
-        selectizeInput("Surface", "Surface", selected = "norm", choices = levels(as.factor(ctsib$Surface))),
-        br(),
-        h3("Select the Gender:"),
-        selectizeInput("Sex", "Sex", selected = "all", choices = c(levels(as.factor(ctsib$Sex )),"all")),
-        br(),
-        checkboxInput("hideplot", "Hide the plot"),
-        sliderInput("size", "Size of Points on Graph", min = 1, max = 10, value = 3, step = 1),
-        conditionalPanel(condition = "input.Sex == 'all'",
-        checkboxInput("conservation", h5("Color Code based on gender (only shows when all is selected)", style = "color:red;"))
-  )
-),
-    
-        # Show output
-        mainPanel(
-          helpText(a("Click Here to see my datasource",href="http://www.statsci.org/data/oz/ctsibuni.txt")
-          ),
-          conditionalPanel(condition = "input.hideplot == false",
-            downloadButton('downloadPlot', 'Download Plot'),
-            
-            plotOutput("ctsibPlot", height = 300,
-                       # Equivalent to: click = clickOpts(id = "plot_click")
-                       click = "plot1_click",
-                       brush = brushOpts(id = "plot1_brush")
-            )),
-          
-          fluidPage(
-              fluidRow(
-                  column(width = 8,
-                         h4("Points near click"),
-                         verbatimTextOutput("click_info")
-                  ),
-                  column(width = 8,
-                         h4("Brushed points"),
-                         verbatimTextOutput("brush_info")
-                  )
-              )
-          ),
-          downloadButton("downloadData", "Download"),
-          tableOutput("table")
+     <h3>Measures</h3>
+     
+     <p>Participant and household characteristics. Data on participant and household characteristics were collected: participants self-reported ethnicity, race, age, education, pregnancy & nursing status, children ages and house holdsize.
+     </p>
+     
+     <p>
+     Nutrition knowledge and behaviors. A validated behavior checklist to gauge nutrition knowledge and dietary behaviors was also collected at the beginning and end of the program. Answers to ten questions were collected (Table 1): plan meals ahead, compare prices, run out of food, use grocery list etc., and a scale of 1 to 5 was coded for answers as ‘never’, ‘seldom’, ‘sometimes’, ‘most of the time’, and ‘always’, respectively.
+     </p>
+                         "
+                     )
+                     )),
+        
+        
+        tabPanel("Methodology",
+                 mainPanel(
+                     HTML(
+                         "
+     <p>Data will be analyzed using RStudio 1.0.44 (R 3.3.2). Firstly, I will run descriptive statistics on variables to summarize the distribution of demographic characteristics (e.g.: counties, genders, ages, highest_grade and race) for both the participants with and without local food exposure.
+     </p>
+     <p>
+     Secondly, I will join the demographic data with the behavior data by the adult id, and combine the participants with local food exposure and participants without local food exposure (a new variable of Local_Food_Exp will be added to indicate whether they are exposed to local food or not). For each of the 10 questions (table 1) which are used to measure the EFNEP program, I will do the chi-squared test to determine whether the answers are significant different between different groups (e.g.: different age groups, different race groups, different gender groups, and different highest grade group), especially, I need to check whether there is significant difference between participants with local food exposure and without local food exposure. As the participant were asked the same questions before and after the program, I will do this kind of test for the answers before and after the program.</p>
+     
+     <p>Thirdly, in this study, our main purpose is to find whether local food will have positive impact on the behavior changes. For each of the 10 questions, I will calculate the notches of changes before and after the program for each participant (new variable Notches_Diff, e.g. if the answer before the program is ‘Never’, and after the program the answer for the same person is ‘Alway’, then the Notches_Diff will be 4). I will conduct another chi-squared test with variables Local_Food_Exp and Notches_Diff (will be treated as categorical variable, and proportion of each value will be derived).</p>
+     
+     <p>Lastly, as we may find there is significant difference regarding demographic characteristics between those participants with local food exposure and participants without local food exposure even before the program started, (that’s one of the reasons why I conduct chi-squared test in the 2nd step); even though we may be able to approve that the local food significantly impact the behavior changes, the impacts may come for those demographic differences, in order to exclude the impact of demographic characteristics, I will try to conduct the chi-squared test among those groups with no significant demographic differences.</p>
+     
+     <p>The chi-squared test is used to determine whether there is a significant difference regarding the observed frequency and the expected frequencies within one or more categories.</p>
+     
+     <p>Suppose that Variable A has r levels, and Variable B has c levels. The null hypothesis states that knowing the level of Variable A does not help you predict the level of Variable B. That is, the variables are independent . </p>
+                         "
+                     )
+                     )),
+        # Application title
+        tabPanel(
+            "Exploration of the EFNEP data",
+            # Sidebar with options for the data set
+            sidebarLayout(
+                sidebarPanel(
+                    h3("Select the Region:"),
+                    selectizeInput(
+                        "Region_Name",
+                        "Region_Name",
+                        selected = "open",
+                        choices = levels(as.factor(EFNEP_data$Region_Name))
+                    ),
+                    br(),
+                    h3("Select the Highest_Grade:"),
+                    selectizeInput(
+                        "Highest_Grade",
+                        "Highest_Grade",
+                        selected = "norm",
+                        choices = levels(as.factor(EFNEP_data$Highest_Grade))
+                    ),
+                    br(),
+                    h3("Select the Gender:"),
+                    selectizeInput(
+                        "Gender",
+                        "Gender",
+                        selected = "all",
+                        choices = c(levels(as.factor(EFNEP_data$Gender)), "all")
+                    ),
+                    br(),
+                    checkboxInput("hideplot", "Hide the plot"),
+                    sliderInput(
+                        "size",
+                        "Size of Points on Graph",
+                        min = 1,
+                        max = 10,
+                        value = 3,
+                        step = 1
+                    ),
+                    conditionalPanel(condition = "input.Gender == 'all'",
+                                     checkboxInput(
+                                         "conservation",
+                                         h5(
+                                             "Color Code based on gender (only shows when all is selected)",
+                                             style = "color:red;"
+                                         )
+                                     ))
+                ),
+                
+                # Show output
+                mainPanel(
+                    helpText(
+                        a("Click Here to see my datasource", href = "http://www.statsci.org/data/oz/EFNEP_datauni.txt")
+                    ),
+                    conditionalPanel(
+                        condition = "input.hideplot == false",
+                        downloadButton('downloadPlot', 'Download Plot'),
+                        
+                        plotOutput(
+                            "EFNEP_dataPlot",
+                            height = 300,
+                            # Equivalent to: click = clickOpts(id = "plot_click")
+                            click = "plot1_click",
+                            brush = brushOpts(id = "plot1_brush")
+                        )
+                    ),
+                    
+                    fluidPage(fluidRow(
+                        column(
+                            width = 8,
+                            h4("Points near click"),
+                            verbatimTextOutput("click_info")
+                        ),
+                        column(
+                            width = 8,
+                            h4("Brushed points"),
+                            verbatimTextOutput("brush_info")
+                        )
+                    )),
+                    downloadButton("downloadData", "Download"),
+                    tableOutput("table")
+                )
+            )
+        ),
+        
+        # Using KNN to analyze the data
+        tabPanel(
+            "Analysis with KNN/Logistic regression",
+            # Sidebar with options for the data set
+            sidebarLayout(
+                sidebarPanel(
+                    h3("Select the supervised learning method:"),
+                    selectizeInput(
+                        "SupervisedMethod",
+                        "SupervisedMethod",
+                        selected = "knn",
+                        choices = c('knn', 'Logistic regression')
+                    ),
+                    h3("Training data percentage:"),
+                    sliderInput(
+                        "TrainingPercent",
+                        "Percent of data used for training",
+                        min = 30,
+                        max = 80,
+                        value = 60,
+                        step = 1
+                    ),
+                    sliderInput(
+                        "NeighborCount",
+                        "Number of neighbors used",
+                        min = 1,
+                        max = 20,
+                        value = 10,
+                        step = 1
+                    ),
+                    selectInput(
+                        "SelectedColumns",
+                        "Select Predictors",
+                        choices = c(
+                            "Sex",
+                            "Age",
+                            "Height",
+                            "Weight",
+                            "Surface",
+                            "Vision",
+                            "BMI",
+                            "PI"
+                        ),
+                        multiple = TRUE,
+                        selected = c(
+                            "Sex",
+                            "Age",
+                            "Height",
+                            "Weight",
+                            "Surface",
+                            "Vision",
+                            "BMI",
+                            "PI"
+                        )
+                    )
+                ),
+                
+                # Show output
+                mainPanel(
+                    helpText(
+                        "The first column is the predicted EFNEP_data, while the Column name is observed value"
+                    ),
+                    uiOutput("knn_output"),
+                    uiOutput("misclassifiedPct")
+                )
+            )
+        ),
+        
+        # Using KNN to analyze the data
+        tabPanel(
+            "Analysis with unsupervised learning",
+            # Sidebar with options for the data set
+            sidebarLayout(
+                sidebarPanel(
+                    selectizeInput(
+                        "NumberOfPcs",
+                        "Principal Component to display",
+                        selected = "1",
+                        choices = as.factor(c(1:6))
+                    ),
+                    #sliderInput("NumberOfPcs", "Number of PCs", min = 1, max = 6, value = 1, step = 1),
+                    selectInput(
+                        "PcaSelectedColumns",
+                        "Select Predictors",
+                        choices = c(
+                            "Sex",
+                            "Age",
+                            "Height",
+                            "Weight",
+                            "Surface",
+                            "Vision",
+                            "BMI",
+                            "PI"
+                        ),
+                        multiple = TRUE,
+                        selected = c(
+                            "Sex",
+                            "Age",
+                            "Height",
+                            "Weight",
+                            "Surface",
+                            "Vision",
+                            "BMI",
+                            "PI"
+                        )
+                    ),
+                    checkboxInput("plotEllipse", "Show the ellipse", value = TRUE),
+                    checkboxInput("plotCircle", "Show the circle", value = TRUE),
+                    
+                    helpText(
+                        "Based on the WIKI page for PCA, in order to maximize variance, the first weight vector  thus has to satisfy"
+                    ),
+                    withMathJax(
+                        helpText(
+                            "$$\\LARGE w_{(1)}=\\arg\\max_{||{w}||=1}\\{\\sum_i{(t_i)_{(i)}^2}\\}=\\arg\\max_{||{w}||=1}\\{\\sum_i{(x_{(i)}*w)^2}\\}$$"
+                        )
+                    ),
+                    withMathJax(
+                        helpText(
+                            "Since \\(\\LARGE w_{(1)}\\) has been defined to be a unit vector, it equivalently also satisfies"
+                        )
+                    ),
+                    withMathJax(
+                        helpText(
+                            "$$\\LARGE w_{(1)}=\\arg\\max_{\\left||{w}\\right||=1}{\\{\\frac{w^TX^TXw}{w^Tw}}\\}$$"
+                        )
+                    ),
+                    helpText("Further components can be defined by following formula"),
+                    withMathJax(
+                        helpText(
+                            "$$\\LARGE \\widehat{X}_k=X-\\sum_{\\delta=1}^{k-1}Xw_{{(\\delta)}}w_{{(\\delta)}}^T$$"
+                        )
+                    )
+                ),
+                # Show output
+                mainPanel(h3(textOutput('caption')),
+                          tabsetPanel(
+                              tabPanel(
+                                  "Component Plot",
+                                  plotOutput("componentplot", height = 280 * 2, width = 250 * 2)
+                              ),
+                              tabPanel("Scree Plot", plotOutput("screeplot", height = "300px")),
+                              tabPanel("Data sample", tableOutput("filetable"))
+                          ))
+            )
         )
-        )
-),
-
-# Using KNN to analyze the data
-tabPanel("Analysis with KNN/Logistic regression",
-         # Sidebar with options for the data set
-         sidebarLayout(
-             sidebarPanel(
-             h3("Select the supervised learning method:"),
-             selectizeInput("SupervisedMethod", "SupervisedMethod", selected = "knn", choices = c('knn','Logistic regression')),
-             h3("Training data percentage:"),
-             sliderInput("TrainingPercent", "Percent of data used for training", min = 30, max = 80, value = 60, step = 1),
-             sliderInput("NeighborCount", "Number of neighbors used", min = 1, max = 20, value = 10, step = 1),
-             selectInput("SelectedColumns","Select Predictors", choices =c("Sex","Age","Height","Weight","Surface","Vision","BMI","PI" ),multiple = TRUE,selected = c("Sex","Age","Height","Weight","Surface","Vision","BMI","PI"))
-             ),
-             
-             # Show output
-             mainPanel(
-                 helpText("The first column is the predicted CTSIB, while the Column name is observed value"),
-                 uiOutput("knn_output"),
-                 uiOutput("misclassifiedPct")
-             )
-         )
-),
-
-# Using KNN to analyze the data
-tabPanel("Analysis with unsupervised learning",
-         # Sidebar with options for the data set
-         sidebarLayout(
-             sidebarPanel(
-                 selectizeInput("NumberOfPcs", "Principal Component to display", selected = "1", choices = as.factor(c(1:6))),
-                 #sliderInput("NumberOfPcs", "Number of PCs", min = 1, max = 6, value = 1, step = 1),
-                 selectInput("PcaSelectedColumns","Select Predictors", choices =c("Sex","Age","Height","Weight","Surface","Vision","BMI","PI" ),multiple = TRUE,selected = c("Sex","Age","Height","Weight","Surface","Vision","BMI","PI")),
-                 checkboxInput("plotEllipse", "Show the ellipse", value = TRUE),
-                 checkboxInput("plotCircle", "Show the circle", value = TRUE),
-                 
-                 helpText("Based on the WIKI page for PCA, in order to maximize variance, the first weight vector  thus has to satisfy"),
-                 withMathJax(helpText("$$\\LARGE w_{(1)}=\\arg\\max_{||{w}||=1}\\{\\sum_i{(t_i)_{(i)}^2}\\}=\\arg\\max_{||{w}||=1}\\{\\sum_i{(x_{(i)}*w)^2}\\}$$")),
-                 withMathJax(helpText("Since \\(\\LARGE w_{(1)}\\) has been defined to be a unit vector, it equivalently also satisfies")),
-                 withMathJax(helpText("$$\\LARGE w_{(1)}=\\arg\\max_{\\left||{w}\\right||=1}{\\{\\frac{w^TX^TXw}{w^Tw}}\\}$$")),
-                 helpText("Further components can be defined by following formula"),
-                 withMathJax(helpText("$$\\LARGE \\widehat{X}_k=X-\\sum_{\\delta=1}^{k-1}Xw_{{(\\delta)}}w_{{(\\delta)}}^T$$"))
-             ),
-             # Show output
-             mainPanel(
-                 h3(textOutput('caption')),
-                 tabsetPanel(
-                     tabPanel("Component Plot",plotOutput("componentplot",height = 280*2, width = 250*2)),
-                     tabPanel("Scree Plot",plotOutput("screeplot", height = "300px")),
-                     tabPanel("Data sample",tableOutput("filetable"))
+        
+                     )
                  )
-                 
-             )
-         )
-)
-
-))
