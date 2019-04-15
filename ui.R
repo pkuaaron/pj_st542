@@ -7,7 +7,7 @@ library(class)
 shinyUI(
     navbarPage(
         "Shiny project for ST542 - Min Chen",
-        tabPanel("Projects requirements",
+        tabPanel("Projects Introduction and Background",
                  mainPanel(
                      HTML(
                          "
@@ -117,69 +117,20 @@ shinyUI(
         
         # Using ttest to analyze the data
         tabPanel(
-            "Analysis with Mean differences (t-test)",
+            "Analysis with t-test",
             # Sidebar with options for the data set
             sidebarLayout(
                 sidebarPanel(
-                    h3("Select the supervised learning method:"),
+                    h3("Select the Question:"),
                     selectizeInput(
-                        "SupervisedMethod",
-                        "SupervisedMethod",
-                        selected = "knn",
-                        choices = c('knn', 'Logistic regression')
-                    ),
-                    h3("Training data percentage:"),
-                    sliderInput(
-                        "TrainingPercent",
-                        "Percent of data used for training",
-                        min = 30,
-                        max = 80,
-                        value = 60,
-                        step = 1
-                    ),
-                    sliderInput(
-                        "NeighborCount",
-                        "Number of neighbors used",
-                        min = 1,
-                        max = 20,
-                        value = 10,
-                        step = 1
-                    ),
-                    selectInput(
-                        "SelectedColumns",
-                        "Select Predictors",
-                        choices = c(
-                            "Sex",
-                            "Age",
-                            "Height",
-                            "Weight",
-                            "Surface",
-                            "Vision",
-                            "BMI",
-                            "PI"
-                        ),
-                        multiple = TRUE,
-                        selected = c(
-                            "Sex",
-                            "Age",
-                            "Height",
-                            "Weight",
-                            "Surface",
-                            "Vision",
-                            "BMI",
-                            "PI"
-                        )
+                        "Question1",
+                        "Question1",
+                        selected = "open",
+                        choices = levels(as.factor(c(paste('Q0',seq(9),sep=''),'Q10')))
                     )
                 ),
-                
                 # Show output
-                mainPanel(
-                    helpText(
-                        "The first column is the predicted EFNEP_data, while the Column name is observed value"
-                    ),
-                    uiOutput("knn_output"),
-                    uiOutput("misclassifiedPct")
-                )
+                mainPanel(h3(textOutput('caption')))
             )
         ),
         
@@ -189,76 +140,16 @@ shinyUI(
             # Sidebar with options for the data set
             sidebarLayout(
                 sidebarPanel(
+                    h3("Select the Question:"),
                     selectizeInput(
-                        "NumberOfPcs",
-                        "Principal Component to display",
-                        selected = "1",
-                        choices = as.factor(c(1:6))
-                    ),
-                    #sliderInput("NumberOfPcs", "Number of PCs", min = 1, max = 6, value = 1, step = 1),
-                    selectInput(
-                        "PcaSelectedColumns",
-                        "Select Predictors",
-                        choices = c(
-                            "Sex",
-                            "Age",
-                            "Height",
-                            "Weight",
-                            "Surface",
-                            "Vision",
-                            "BMI",
-                            "PI"
-                        ),
-                        multiple = TRUE,
-                        selected = c(
-                            "Sex",
-                            "Age",
-                            "Height",
-                            "Weight",
-                            "Surface",
-                            "Vision",
-                            "BMI",
-                            "PI"
-                        )
-                    ),
-                    checkboxInput("plotEllipse", "Show the ellipse", value = TRUE),
-                    checkboxInput("plotCircle", "Show the circle", value = TRUE),
-                    
-                    helpText(
-                        "Based on the WIKI page for PCA, in order to maximize variance, the first weight vector  thus has to satisfy"
-                    ),
-                    withMathJax(
-                        helpText(
-                            "$$\\LARGE w_{(1)}=\\arg\\max_{||{w}||=1}\\{\\sum_i{(t_i)_{(i)}^2}\\}=\\arg\\max_{||{w}||=1}\\{\\sum_i{(x_{(i)}*w)^2}\\}$$"
-                        )
-                    ),
-                    withMathJax(
-                        helpText(
-                            "Since \\(\\LARGE w_{(1)}\\) has been defined to be a unit vector, it equivalently also satisfies"
-                        )
-                    ),
-                    withMathJax(
-                        helpText(
-                            "$$\\LARGE w_{(1)}=\\arg\\max_{\\left||{w}\\right||=1}{\\{\\frac{w^TX^TXw}{w^Tw}}\\}$$"
-                        )
-                    ),
-                    helpText("Further components can be defined by following formula"),
-                    withMathJax(
-                        helpText(
-                            "$$\\LARGE \\widehat{X}_k=X-\\sum_{\\delta=1}^{k-1}Xw_{{(\\delta)}}w_{{(\\delta)}}^T$$"
-                        )
+                        "Question1",
+                        "Question1",
+                        selected = "open",
+                        choices = levels(as.factor(c(paste('Q0',seq(9),sep=''),'Q10')))
                     )
                 ),
                 # Show output
-                mainPanel(h3(textOutput('caption')),
-                          tabsetPanel(
-                              tabPanel(
-                                  "Component Plot",
-                                  plotOutput("componentplot", height = 280 * 2, width = 250 * 2)
-                              ),
-                              tabPanel("Scree Plot", plotOutput("screeplot", height = "300px")),
-                              tabPanel("Data sample", tableOutput("filetable"))
-                          ))
+                mainPanel(h3(textOutput('caption')))
             )
         )
         
