@@ -69,20 +69,12 @@ shinyUI(
             # Sidebar with options for the data set
             sidebarLayout(
                 sidebarPanel(
-                    h3("Select the Region:"),
+                    h3("Select the Question:"),
                     selectizeInput(
-                        "Region_Name",
-                        "Region_Name",
+                        "Question",
+                        "Question",
                         selected = "open",
-                        choices = levels(as.factor(EFNEP_data$Region_Name))
-                    ),
-                    br(),
-                    h3("Select the Highest_Grade:"),
-                    selectizeInput(
-                        "Highest_Grade",
-                        "Highest_Grade",
-                        selected = "norm",
-                        choices = levels(as.factor(EFNEP_data$Highest_Grade))
+                        choices = levels(as.factor(c(paste('Q0',seq(9),sep=''),'Q10')))
                     ),
                     br(),
                     h3("Select the Gender:"),
@@ -93,64 +85,39 @@ shinyUI(
                         choices = c(levels(as.factor(EFNEP_data$Gender)), "all")
                     ),
                     br(),
-                    checkboxInput("hideplot", "Hide the plot"),
-                    sliderInput(
-                        "size",
-                        "Size of Points on Graph",
-                        min = 1,
-                        max = 10,
-                        value = 3,
-                        step = 1
-                    ),
-                    conditionalPanel(condition = "input.Gender == 'all'",
-                                     checkboxInput(
-                                         "conservation",
-                                         h5(
-                                             "Color Code based on gender (only shows when all is selected)",
-                                             style = "color:red;"
-                                         )
-                                     ))
+                    checkboxInput("hideplot", "Hide the plot")
                 ),
                 
                 # Show output
                 mainPanel(
-                    helpText(
-                        a("Click Here to see my datasource", href = "http://www.statsci.org/data/oz/EFNEP_datauni.txt")
-                    ),
                     conditionalPanel(
                         condition = "input.hideplot == false",
                         downloadButton('downloadPlot', 'Download Plot'),
                         
                         plotOutput(
-                            "EFNEP_dataPlot",
-                            height = 300,
-                            # Equivalent to: click = clickOpts(id = "plot_click")
-                            click = "plot1_click",
-                            brush = brushOpts(id = "plot1_brush")
+                            "EFNEP_dataPlot_local",
+                            height = 300
                         )
                     ),
                     
-                    fluidPage(fluidRow(
-                        column(
-                            width = 8,
-                            h4("Points near click"),
-                            verbatimTextOutput("click_info")
-                        ),
-                        column(
-                            width = 8,
-                            h4("Brushed points"),
-                            verbatimTextOutput("brush_info")
+                    conditionalPanel(
+                        condition = "input.hideplot == false",
+                        downloadButton('downloadPlot2', 'Download Plot2'),
+                        
+                        plotOutput(
+                            "EFNEP_dataPlot_non_local",
+                            height = 300
                         )
-                    )),
+                    ),
                     downloadButton("downloadData", "Download"),
                     tableOutput("table")
                 )
             )
         ),
         
-        # Using KNN to analyze the data
+        # Using ttest to analyze the data
         tabPanel(
-            "Analysis with KNN/Logistic regression",
+            "Analysis with Mean differences (t-test)",
             # Sidebar with options for the data set
             sidebarLayout(
                 sidebarPanel(
@@ -216,9 +183,9 @@ shinyUI(
             )
         ),
         
-        # Using KNN to analyze the data
+        # Using Chi-Squared to analyze the data
         tabPanel(
-            "Analysis with unsupervised learning",
+            "Analysis with Chi-Squared",
             # Sidebar with options for the data set
             sidebarLayout(
                 sidebarPanel(
@@ -295,5 +262,5 @@ shinyUI(
             )
         )
         
-                     )
-                 )
+     )
+ )
